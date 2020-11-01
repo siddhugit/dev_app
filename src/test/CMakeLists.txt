@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.2)
 project (hello)
 
 include_directories(../adder)
-include_directories(../protobufs)
+set(TEMP_PROTO_OUT_DIR "${CMAKE_BINARY_DIR}/proto")
+include_directories(${TEMP_PROTO_OUT_DIR})
 include_directories(${PROJ_SDK_DIR}/protobuf/include)
 
 link_directories(${PROJ_SDK_DIR}/protobuf/lib/protobuf-${SDK}/static)

@@ -2,18 +2,20 @@ set(PROJ_PROTO_COMMAND "${PROJ_SDK_DIR}/protobuf/bin/protoc")
 
 file(GLOB PROTOBUF_DEFINITION_FILES "*.proto")
 
+set(TEMP_PROTO_OUT_DIR "${CMAKE_BINARY_DIR}/proto")
+file(MAKE_DIRECTORY ${TEMP_PROTO_OUT_DIR})
+
 foreach(file ${PROTOBUF_DEFINITION_FILES})
     get_filename_component(protoFileName ${file} NAME)
     set(oldLdLibPath ENV{LD_LIBRARY_PATH})
     set(ENV{LD_LIBRARY_PATH} "${PROJ_SDK_DIR}/protobuf/lib/protobuf-native/;${oldLdLibPath}")
-    set(PROTOBUF_ARGUMENTS "protoc -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=\"${CMAKE_CURRENT_SOURCE_DIR}\" \"${protoFileName}\"")
-    execute_process(COMMAND ${PROJ_PROTO_COMMAND} -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${CMAKE_CURRENT_SOURCE_DIR} ${protoFileName}
+    execute_process(COMMAND ${PROJ_PROTO_COMMAND} -I=${CMAKE_CURRENT_SOURCE_DIR} --cpp_out=${TEMP_PROTO_OUT_DIR} ${protoFileName}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         RESULT_VARIABLE PROTOBUF_RESULT)
     set(ENV{LD_LIBRARY_PATH} ${oldLdLibPath})
 endforeach()
 
-file(GLOB PROTOBUF_SOURCE_FILES "*.pb.cc")
+file(GLOB PROTOBUF_SOURCE_FILES "${TEMP_PROTO_OUT_DIR}/*.pb.cc")
 
 include_directories(${PROJ_SDK_DIR}/protobuf/include)
 
