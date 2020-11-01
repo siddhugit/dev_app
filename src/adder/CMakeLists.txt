@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.2)
+project (adder)
+add_library(adder SHARED add.cpp)
+add_library(adder_static STATIC add.cpp)
+install(TARGETS adder DESTINATION ${PROJ_INSTALL_LIB_DIR}/${CMAKE_BUILD_TYPE})
+install(TARGETS adder_static DESTINATION ${PROJ_INSTALL_LIB_DIR}/${CMAKE_BUILD_TYPE}/static)
